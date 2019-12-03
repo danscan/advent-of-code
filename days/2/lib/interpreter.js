@@ -3,56 +3,48 @@ const OPCODE_MULTIPLY = 2;
 const OPCODE_EXIT = 99;
 
 module.exports = function intcodeInterpreter(
-  program,
-  currentPosition = 0,
+  memory,
+  instructionPointer = 0,
 ) {
-  console.log('currentPosition:', currentPosition);
-  const opcode = program[currentPosition];
-  console.log('opcode:', opcode);
+  const opcode = memory[instructionPointer];
 
   switch (opcode) {
     case OPCODE_ADD:
-      console.log('add');
-      mutativeProgramInfixOperation(
-        program,
-        currentPosition,
+      mutativeInfixOperation(
+        memory,
+        instructionPointer,
         (a, b) => a + b,
       );
       break;
 
     case OPCODE_MULTIPLY:
-      console.log('multiply');
-      mutativeProgramInfixOperation(
-        program,
-        currentPosition,
+      mutativeInfixOperation(
+        memory,
+        instructionPointer,
         (a, b) => a * b,
       );
       break;
 
     case OPCODE_EXIT:
     default:
-      console.log('exit... program', program);
-      return program;
+      return memory;
   }
 
-  return intcodeInterpreter(program, currentPosition + 4);
+  return intcodeInterpreter(memory, instructionPointer + 4);
 }
 
-function mutativeProgramInfixOperation(
-  program,
-  currentPosition,
+function mutativeInfixOperation(
+  memory,
+  instructionPointer,
   operator,
 ) {
-  const operandPositionA = program[currentPosition + 1];
-  const operandPositionB = program[currentPosition + 2];
-  const resultWritePosition = program[currentPosition + 3];
+  const operandPositionA = memory[instructionPointer + 1];
+  const operandPositionB = memory[instructionPointer + 2];
+  const resultWritePosition = memory[instructionPointer + 3];
   const [operandA, operandB] = [
-    program[operandPositionA],
-    program[operandPositionB],
+    memory[operandPositionA],
+    memory[operandPositionB],
   ];
-  console.log('resultWritePosition:', resultWritePosition);
-  console.log('operandA:', operandA);
-  console.log('operandB:', operandB);
 
-  program[resultWritePosition] = operator(operandA, operandB);
+  memory[resultWritePosition] = operator(operandA, operandB);
 }
