@@ -1,28 +1,9 @@
 const path = require('path');
-const buildVectorPath = require('./lib/buildVectorPath');
 const parsePuzzleInput = require('./lib/parsePuzzleInput');
-const pathPositionFromString = require('./lib/pathPositionFromString');
-const pathPositionToString = require('./lib/pathPositionToString');
-const findPathSetCrossPositions = require('./lib/findPathSetCrossPositions');
+const calcPathsCombinedStepsToNearestCrossPositions = require('./lib/calcPathsCombinedStepsToNearestCrossPositions');
 
-const puzzleInput = parsePuzzleInput(path.resolve(__dirname, './input.txt'));
-const [pathSetA, pathSetB] = puzzleInput.map(buildVectorPath);
+const [pathEntriesA, pathEntriesB] = parsePuzzleInput(path.resolve(__dirname, './input.txt'));
 
-const crossPositions = findPathSetCrossPositions(pathSetA, pathSetB);
+const steps = calcPathsCombinedStepsToNearestCrossPositions(pathEntriesA, pathEntriesB)
 
-// –
-// Helpers
-// –
-const numberSortCompare = (a, b) => a - b;
-
-// Part One
-const sortedCrossPositionsDistances = crossPositions
-  .map(crossPositionString => {
-    const [x, y] = pathPositionFromString(crossPositionString);
-    return Math.abs(x) + Math.abs(y);
-  })
-  .sort(numberSortCompare);
-
-const partOneAnswer = sortedCrossPositionsDistances[0];
-
-console.log(partOneAnswer);
+console.log(steps);

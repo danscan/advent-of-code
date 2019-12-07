@@ -26,7 +26,6 @@ module.exports = function buildVectorPath(pathEntries) {
       return [...acc, ...interStepPositions];
     }, [[0, 0]]);
   const pathPositionStrings = pathPositions.map(pathPositionToString);
-  const pathSet = new Set(pathPositionStrings);
   
-  return pathSet;
+  return pathPositionStrings;
 }
